@@ -3,6 +3,8 @@ import configparser
 import os
 from dataclasses import dataclass
 
+from .osutil import default_lib_path
+
 DEFAULT_CONFIG_PATH = os.path.join(os.getcwd(), "config.ini")
 
 
@@ -22,7 +24,7 @@ def load_config(path: str | None = None) -> HsmConfig:
     config.ini 자체가 없으면 기본값(lib_path 만 기본 경로)으로 동작한다.
     """
     path = path or DEFAULT_CONFIG_PATH
-    default_lib = r"C:\Program Files\SafeNet\LunaClient\cryptoki.dll"
+    default_lib = default_lib_path()
     if not os.path.exists(path):
         return HsmConfig(lib_path=default_lib)
 
@@ -31,7 +33,7 @@ def load_config(path: str | None = None) -> HsmConfig:
     hsm = parser["hsm"] if parser.has_section("hsm") else {}
 
     return HsmConfig(
-        lib_path=hsm.get("lib_path", default_lib),
+        lib_path=hsm.get("lib_path") or default_lib,  # 빈 값이면 OS 기본 경로
         slot=parser.getint("hsm", "slot", fallback=0),
         pin=hsm.get("pin", ""),
         token_objects=parser.getboolean("options", "token_objects", fallback=True),

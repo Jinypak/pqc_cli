@@ -35,6 +35,7 @@ pqc_cli/
 │   ├── app.py                # 대화형 메뉴 애플리케이션
 │   ├── prompt.py             # 메뉴/입력 헬퍼 (PIN 은 getpass)
 │   ├── config.py             # config.ini 로딩 (slot/PIN 은 대화형 입력)
+│   ├── osutil.py             # OS별 분기 (라이브러리 경로 / ctypes 로더)
 │   ├── logger.py             # 공용 로거
 │   ├── hsm/
 │   │   ├── session.py        # PyKCS11 세션 (라이브러리 로드/슬롯/로그인)
@@ -55,6 +56,16 @@ pip install -r requirements.txt
 # config.ini 는 선택사항(라이브러리 경로 기본값 사용). 슬롯/PIN 은 실행 중 입력한다.
 cp config.example.ini config.ini   # 필요 시 lib_path 등만 수정
 ```
+
+### OS별 Luna 라이브러리 경로 (자동 선택)
+
+| OS | PKCS#11 라이브러리 기본 경로 | 로더 |
+|----|------------------------------|------|
+| Windows | `C:\Program Files\SafeNet\LunaClient\cryptoki.dll` | WinDLL (stdcall) |
+| Linux | `/usr/safenet/lunaclient/lib/libCryptoki2_64.so` | CDLL (cdecl) |
+
+`config.ini` 의 `lib_path` 로 덮어쓸 수 있으며, 없으면 위 기본값이 자동 사용된다.
+(`pqc_cli/osutil.py` 에서 분기)
 
 ## 사용 (대화형)
 
