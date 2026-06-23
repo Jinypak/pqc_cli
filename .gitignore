@@ -1,0 +1,27 @@
+# 실제 설정(슬롯/PIN 등 민감정보) — 커밋 금지
+config.ini
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# 테스트/실행 산출물
+*.sig
+*.ct
+*.bin
+_scratch_*.py
+
+# 에디터/OS
+.vscode/
+.idea/
+.DS_Store
+
+# 로컬 Claude Code 설정 / 임시
+.claude/
+test.txt
+*.txt
+!requirements.txt
